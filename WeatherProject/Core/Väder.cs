@@ -10,7 +10,7 @@ namespace WeatherProject.Core
     {
         public int Id { get; set; }
         public DateTime Datum { get; set; }
-        public decimal Medeltemperatur { get; set; }  
+        public decimal Medeltemperatur { get; set; }
         public decimal Medelluftfuktighet { get; set; }
         public decimal MögelRisk { get; set; }
         public string Vinter { get; set; }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Väderdata.Core;
 using WeatherProject.Core;
 
@@ -26,13 +27,34 @@ class Program
                 Höst = "22 september 2024"
             };
 
-            // Spara i databasen
+            
             context.VäderData.Add(nyttVäder);
             context.SaveChanges();
 
             
-            Console.WriteLine("En väderpost har sparats i databasen!");
+            string csvFilePath = "TempFuktData.csv";
+
+            // Kontrollera om filen redan existerar
+            bool fileExists = File.Exists(csvFilePath);
+
+            
+            using (var writer = new StreamWriter(csvFilePath, append: true))
+            {
+                // Om filen inte existerar
+                if (!fileExists)
+                {
+                    writer.WriteLine("Datum,Medeltemperatur,Medelluftfuktighet,MögelRisk,Vinter,Höst");
+                }
+
+                
+                writer.WriteLine($"{nyttVäder.Datum},{nyttVäder.Medeltemperatur},{nyttVäder.Medelluftfuktighet},{nyttVäder.MögelRisk},{nyttVäder.Vinter},{nyttVäder.Höst}");
+            }
+
+            Console.WriteLine("En väderpost har sparats i databasen och TempFuktData.csv!");
             Console.WriteLine($"Mögelrisk: {riskVärde} ({riskBeskrivning})");
+
+            
+            Process.Start(new ProcessStartInfo(csvFilePath) { UseShellExecute = true });
         }
     }
 }
